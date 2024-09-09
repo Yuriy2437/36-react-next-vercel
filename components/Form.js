@@ -9,26 +9,28 @@ export default function Form() {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
+    const fetchEntries = async () => {
+      try {
+        const response = await axios.get('/api/text');
+        setEntries(response.data);
+      } catch (error) {
+        console.error('Error fetching entries:', error);
+      }
+    };
+
     fetchEntries();
   }, []);
-
-  const fetchEntries = async () => {
-    try {
-      const response = await axios.get('/api/text');
-      setEntries(response.data);
-    } catch (error) {
-      console.error('Error fetching entries:', error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/text', { name, text });
-      setEntries([...entries, { name, text }]);
-      fetchEntries(); // Обновляем список после отправки
-      setName('');
-      setText('');
+      if (response.data.success) {
+        setEntries(response.data.success);
+        // fetchEntries(); // Обновляем список после отправки
+        setName('');
+        setText('');
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     }

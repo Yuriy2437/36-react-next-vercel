@@ -29,7 +29,7 @@ export async function POST(req) {
 
   fs.writeFileSync(filePath, JSON.stringify(entries, null, 2));
 
-  return new Response(JSON.stringify({ success: true }), {
+  return new Response(JSON.stringify({ success: true, entries }), {
     headers: { 'Content-Type': 'application/json' },
   });
 }
