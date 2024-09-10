@@ -6,13 +6,13 @@ import axios from 'axios';
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
-  const [submittedData, setSubmittedData] = useState(initialData);
+  const [entries, setEntries] = useState(initialData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('/api/update-text', { name, text });
-      setSubmittedData(response.data);
+      setEntries([...entries, response.data]);
       setName('');
       setText('');
     } catch (error) {
@@ -20,13 +20,34 @@ export default function TextForm({ initialData }) {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/update-text?id=${id}`);
+      setEntries(entries.filter((entry) => entry._id !== id));
+    } catch (error) {
+      console.error('Error deleting entry:', error);
+    }
+  };
+
   return (
     <div>
-      {submittedData.map((item, index) => (
-        <p key={index}>
-          Name: {item.name}, Text: {item.text}
-        </p>
-      ))}
+      <div>
+        <h2>Entries:</h2>
+        {entries.map((item) => (
+          <div
+            key={item._id}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: '10px',
+            }}
+          >
+            <span style={{ marginRight: '10px' }}>Name: {item.name}</span>
+            <span style={{ marginRight: '10px' }}>Text: {item.text}</span>
+            <button onClick={() => handleDelete(item._id)}>Delete</button>
+          </div>
+        ))}
+      </div>
       <form onSubmit={handleSubmit}>
         <input
           type='text'

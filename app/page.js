@@ -10,12 +10,6 @@ export default async function Home() {
   return (
     <main>
       <h1>Text from MongoDB</h1>
-      {initialData.length > 0 && (
-        <>
-          <p>Name: {initialData[0].name}</p>
-          <p>Text: {initialData[0].text}</p>
-        </>
-      )}
       <TextForm initialData={initialData} />
     </main>
   );
