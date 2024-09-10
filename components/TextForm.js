@@ -1,21 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
   const [submittedData, setSubmittedData] = useState(initialData);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get('/api/update-text');
-      setSubmittedData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
