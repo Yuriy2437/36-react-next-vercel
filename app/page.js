@@ -1,3 +1,6 @@
+import TextForm from '../components/TextForm';
+import clientPromise from '../lib/mongodb';
+
 export default async function Home() {
   try {
     const client = await clientPromise;
