@@ -6,7 +6,10 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB_NAME);
     const collection = db.collection('texts');
+
     const data = await collection.find({}).toArray();
+
+    console.log('Data fetched from MongoDB:', data); // Добавьте для отладки
 
     const serializedData = data.map((item) => ({
       ...item,

@@ -6,11 +6,12 @@ import axios from 'axios';
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState(initialData || []);
 
   const fetchLatestData = async () => {
     try {
       const response = await axios.get('/api/get-texts');
+      console.log('Data received from API:', response.data); // Добавьте для отладки
       setEntries(response.data);
     } catch (error) {
       console.error('Error fetching latest data:', error);
@@ -24,11 +25,10 @@ export default function TextForm({ initialData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/update-text', { name, text });
-      setEntries([...entries, response.data]);
+      await axios.post('/api/update-text', { name, text });
       setName('');
       setText('');
-      fetchLatestData(); // Обновляем данные после добавления
+      fetchLatestData();
     } catch (error) {
       console.error('Error submitting data:', error);
     }
@@ -37,7 +37,7 @@ export default function TextForm({ initialData }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/update-text?id=${id}`);
-      fetchLatestData(); // Обновляем данные после удаления
+      fetchLatestData();
     } catch (error) {
       console.error('Error deleting entry:', error);
     }
@@ -46,7 +46,7 @@ export default function TextForm({ initialData }) {
   return (
     <div>
       <div>
-        <h2>Entries:</h2>
+        <h2>Entries: {entries.length}</h2>
         {entries.map((item) => (
           <div
             key={item._id}
