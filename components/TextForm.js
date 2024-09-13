@@ -9,9 +9,12 @@ export default function TextForm({ initialData }) {
   const [entries, setEntries] = useState([]);
 
   useEffect(() => {
-    console.log('Initial data in TextForm:', initialData); // Добавьте это для отладки
-    if (initialData && initialData.length > 0) {
+    console.log('Initial data in TextForm:', initialData);
+    if (initialData && Array.isArray(initialData)) {
+      console.log('Setting entries:', initialData);
       setEntries(initialData);
+    } else {
+      console.log('Invalid initial data:', initialData);
     }
   }, [initialData]);
 

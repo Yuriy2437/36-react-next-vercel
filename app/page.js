@@ -1,20 +1,21 @@
-import TextForm from '../components/TextForm';
-import clientPromise from '../lib/mongodb';
-
 export default async function Home() {
   try {
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB_NAME);
+    const db = client.db('name_text');
     const collection = db.collection('texts');
-    const initialData = await collection.find({}).toArray();
 
-    // Преобразуем _id в строку для корректной сериализации
+    console.log('Connected to database:', process.env.MONGODB_DB_NAME);
+    console.log('Collection name:', collection.collectionName);
+
+    const initialData = await collection.find({}).toArray();
+    console.log('Raw data from MongoDB:', initialData);
+
     const serializedData = initialData.map((item) => ({
       ...item,
       _id: item._id.toString(),
     }));
 
-    console.log('Serialized data:', serializedData); // Добавьте для отладки
+    console.log('Serialized data:', serializedData);
 
     return (
       <main>
