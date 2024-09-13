@@ -22,12 +22,8 @@ export default function TextForm({ initialData }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/api/update-text?id=${id}`);
-      if (response.data.success) {
-        setEntries(entries.filter((entry) => entry._id !== id));
-      } else {
-        console.error('Failed to delete entry:', response.data.message);
-      }
+      await axios.delete(`/api/update-text?id=${id}`);
+      setEntries(entries.filter((entry) => entry._id !== id));
     } catch (error) {
       console.error('Error deleting entry:', error);
     }

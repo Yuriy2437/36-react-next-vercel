@@ -7,10 +7,15 @@ export default async function Home() {
   const collection = db.collection('texts');
   const initialData = await collection.find({}).toArray();
 
+  const serializedData = initialData.map((item) => ({
+    ...item,
+    _id: item._id.toString(),
+  }));
+
   return (
     <main>
       <h1>Text from MongoDB</h1>
-      <TextForm initialData={initialData} />
+      <TextForm initialData={serializedData} />
     </main>
   );
 }

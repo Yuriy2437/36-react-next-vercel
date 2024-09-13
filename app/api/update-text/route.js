@@ -12,12 +12,11 @@ export async function GET() {
 
 export async function POST(request) {
   const { name, text } = await request.json();
-
   const client = await clientPromise;
   const db = client.db('name_text');
   const collection = db.collection('texts');
-  const result = await collection.insertOne({ name, text, ip: '' });
-  return NextResponse.json({ _id: result.insertedId, name, text });
+  const result = await collection.insertOne({ name, text });
+  return NextResponse.json({ _id: result.insertedId.toString(), name, text });
 }
 
 export async function DELETE(request) {
@@ -30,7 +29,7 @@ export async function DELETE(request) {
 
   try {
     const client = await clientPromise;
-    const db = client.db('your_database_name');
+    const db = client.db('name_text');
     const collection = db.collection('texts');
 
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
