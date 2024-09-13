@@ -6,15 +6,19 @@ import axios from 'axios';
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
-  const [entries, setEntries] = useState(initialData || []);
+  const [entries, setEntries] = useState(initialData);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchLatestData = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get('/api/get-texts');
-      console.log('Data received from API:', response.data); // Добавьте для отладки
+      console.log('Data received from API:', response.data);
       setEntries(response.data);
     } catch (error) {
       console.error('Error fetching latest data:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,6 +46,10 @@ export default function TextForm({ initialData }) {
       console.error('Error deleting entry:', error);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
