@@ -8,13 +8,13 @@ export default async function Home() {
     const collection = db.collection('texts');
     const initialData = await collection.find({}).toArray();
 
-    console.log('Initial data from MongoDB:', initialData); // Добавьте это для отладки
-
     // Преобразуем _id в строку для корректной сериализации
-    // const serializedData = initialData.map((item) => ({
-    //   ...item,
-    //   _id: item._id.toString(),
-    // }));
+    const serializedData = initialData.map((item) => ({
+      ...item,
+      _id: item._id.toString(),
+    }));
+
+    console.log('Serialized data:', serializedData); // Добавьте для отладки
 
     return (
       <main>
