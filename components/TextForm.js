@@ -9,7 +9,10 @@ export default function TextForm({ initialData }) {
   const [entries, setEntries] = useState(initialData);
 
   useEffect(() => {
-    setEntries(initialData);
+    console.log('Initial data in TextForm:', initialData); // Добавьте это для отладки
+    if (initialData && initialData.length > 0) {
+      setEntries(initialData);
+    }
   }, [initialData]);
 
   const handleSubmit = async (e) => {
