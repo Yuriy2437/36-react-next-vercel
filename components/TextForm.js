@@ -8,15 +8,18 @@ export default function TextForm({ initialData }) {
   const [text, setText] = useState('');
   const [entries, setEntries] = useState([]);
 
-  useEffect(() => {
-    console.log('Initial data in TextForm:', initialData);
-    if (initialData && Array.isArray(initialData)) {
-      console.log('Setting entries:', initialData);
-      setEntries(initialData);
-    } else {
-      console.log('Invalid initial data:', initialData);
+  const fetchLatestData = async () => {
+    try {
+      const response = await axios.get('/api/get-texts');
+      setEntries(response.data);
+    } catch (error) {
+      console.error('Error fetching latest data:', error);
     }
-  }, [initialData]);
+  };
+
+  useEffect(() => {
+    fetchLatestData();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +28,7 @@ export default function TextForm({ initialData }) {
       setEntries([...entries, response.data]);
       setName('');
       setText('');
+      fetchLatestData(); // Обновляем данные после добавления
     } catch (error) {
       console.error('Error submitting data:', error);
     }
@@ -33,7 +37,7 @@ export default function TextForm({ initialData }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/update-text?id=${id}`);
-      setEntries(entries.filter((entry) => entry._id !== id));
+      fetchLatestData(); // Обновляем данные после удаления
     } catch (error) {
       console.error('Error deleting entry:', error);
     }
