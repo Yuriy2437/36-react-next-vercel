@@ -1,12 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
   const [entries, setEntries] = useState(initialData);
+
+  useEffect(() => {
+    setEntries(initialData);
+  }, [initialData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,17 +26,10 @@ export default function TextForm({ initialData }) {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/api/update-text?id=${id}`);
-      if (response.data.success) {
-        setEntries(entries.filter((entry) => entry._id !== id));
-      } else {
-        console.error('Failed to delete entry:', response.data.message);
-      }
+      await axios.delete(`/api/update-text?id=${id}`);
+      setEntries(entries.filter((entry) => entry._id !== id));
     } catch (error) {
-      console.error(
-        'Error deleting entry:',
-        error.response?.data || error.message
-      );
+      console.error('Error deleting entry:', error);
     }
   };
 
