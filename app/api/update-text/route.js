@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 export async function GET() {
   const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB_NAME);
+  const db = client.db('name_text');
   const collection = db.collection('texts');
   const data = await collection.find({}).toArray();
   return NextResponse.json(data);
@@ -13,7 +13,7 @@ export async function GET() {
 export async function POST(request) {
   const { name, text } = await request.json();
   const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB_NAME);
+  const db = client.db('name_text');
   const collection = db.collection('texts');
   const result = await collection.insertOne({ name, text });
   return NextResponse.json({ _id: result.insertedId.toString(), name, text });
@@ -29,7 +29,7 @@ export async function DELETE(request) {
 
   try {
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB_NAME);
+    const db = client.db('name_text');
     const collection = db.collection('texts');
 
     const result = await collection.deleteOne({ _id: new ObjectId(id) });

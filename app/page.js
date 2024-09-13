@@ -3,7 +3,7 @@ import clientPromise from '../lib/mongodb';
 
 export default async function Home() {
   const client = await clientPromise;
-  const db = client.db(process.env.MONGODB_DB_NAME);
+  const db = client.db('name_text');
   const collection = db.collection('texts');
   const initialData = await collection.find({}).toArray();
 
