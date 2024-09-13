@@ -19,6 +19,8 @@ export async function POST(request) {
   return NextResponse.json({ _id: result.insertedId.toString(), name, text });
 }
 
+export const revalidate = 0; // Отключаем кэширование
+
 export async function DELETE(request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get('id');
