@@ -8,15 +8,12 @@ export default function TextForm({ initialData }) {
   const [text, setText] = useState('');
   const [entries, setEntries] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-  const [adminLogin, setAdminLogin] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchLatestData = async () => {
     try {
       setIsLoading(true);
       const response = await axios.get('/api/get-texts');
+      console.log('Data received from API:', response.data);
       setEntries(response.data);
     } catch (error) {
       console.error('Error fetching latest data:', error);
@@ -42,24 +39,12 @@ export default function TextForm({ initialData }) {
   };
 
   const handleDelete = async (id) => {
-    if (!isAdmin) return;
     try {
       await axios.delete(`/api/update-text?id=${id}`);
       setEntries(entries.filter((entry) => entry._id !== id));
     } catch (error) {
       console.error('Error deleting entry:', error);
     }
-  };
-
-  const handleAdminLogin = () => {
-    if (adminLogin === 'Yuriy1967' && adminPassword === 'TREMOR') {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
-    setShowAdminLogin(false);
-    setAdminLogin('');
-    setAdminPassword('');
   };
 
   if (isLoading) {
@@ -81,9 +66,7 @@ export default function TextForm({ initialData }) {
           >
             <span style={{ marginRight: '10px' }}>Name: {item.name}</span>
             <span style={{ marginRight: '10px' }}>Text: {item.text}</span>
-            {isAdmin && (
-              <button onClick={() => handleDelete(item._id)}>Delete</button>
-            )}
+            <button onClick={() => handleDelete(item._id)}>Delete</button>
           </div>
         ))}
       </div>
@@ -102,34 +85,6 @@ export default function TextForm({ initialData }) {
         />
         <button type='submit'>Submit</button>
       </form>
-      <button onClick={() => setShowAdminLogin(true)}>Admin</button>
-      {showAdminLogin && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'white',
-            padding: '20px',
-            boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-          }}
-        >
-          <input
-            type='text'
-            value={adminLogin}
-            onChange={(e) => setAdminLogin(e.target.value)}
-            placeholder='Login'
-          />
-          <input
-            type='password'
-            value={adminPassword}
-            onChange={(e) => setAdminPassword(e.target.value)}
-            placeholder='Password'
-          />
-          <button onClick={handleAdminLogin}>Authorize</button>
-        </div>
-      )}
     </div>
   );
 }
