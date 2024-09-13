@@ -7,7 +7,7 @@ export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
   const [entries, setEntries] = useState(initialData);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchLatestData = async () => {
     try {
@@ -29,10 +29,10 @@ export default function TextForm({ initialData }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/update-text', { name, text });
+      const response = await axios.post('/api/update-text', { name, text });
+      setEntries([...entries, response.data]);
       setName('');
       setText('');
-      fetchLatestData();
     } catch (error) {
       console.error('Error submitting data:', error);
     }
@@ -41,7 +41,7 @@ export default function TextForm({ initialData }) {
   const handleDelete = async (id) => {
     try {
       await axios.delete(`/api/update-text?id=${id}`);
-      fetchLatestData();
+      setEntries(entries.filter((entry) => entry._id !== id));
     } catch (error) {
       console.error('Error deleting entry:', error);
     }
