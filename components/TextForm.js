@@ -6,11 +6,7 @@ import axios from 'axios';
 export default function TextForm({ initialData }) {
   const [name, setName] = useState('');
   const [text, setText] = useState('');
-  const [entries, setEntries] = useState(initialData);
-
-  useEffect(() => {
-    console.log('Entries in TextForm:', entries); // Добавьте для отладки
-  }, [entries]);
+  const [entries, setEntries] = useState([]);
 
   useEffect(() => {
     console.log('Initial data in TextForm:', initialData); // Добавьте это для отладки
